@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "1039894918261",
+    "firebase_url": "https://mashaweer-21020.firebaseio.com",
+    "project_id": "mashaweer-21020",
+    "storage_bucket": "mashaweer-21020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039894918261:android:dfb62449af156c66",
+        "android_client_info": {
+          "package_name": "com.example.eslam.mashaweer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1039894918261-tbbhs7jmum4rqm5401gsbttjpn0u88eu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eslam.mashaweer",
+            "certificate_hash": "bceac14e7ad8d3c90d44a700e282dba6892918fe"
+          }
+        },
+        {
+          "client_id": "1039894918261-bvrdb4253bsqhg9b8m8rinb65phcfl13.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-sRIkwzVP6PADSjg-xjz3OH-j3vTAsYg"
+        },
+        {
+          "current_key": "AIzaSyC-sRIkwzVP6PADSjg-xjz3OH-j3vTAsYg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039894918261-bvrdb4253bsqhg9b8m8rinb65phcfl13.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
