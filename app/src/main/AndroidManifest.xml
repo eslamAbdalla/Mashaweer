@@ -23,7 +23,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Test_Data"></activity>
+        <activity android:name=".Test_Data" />
+        <activity android:name=".LogIn_Activity" />
+        <activity android:name=".Profile_Owner"></activity>
     </application>
 
 </manifest>

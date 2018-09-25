@@ -11,25 +11,39 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class Test_Data extends AppCompatActivity {
 
 
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_DESCRIPTION = "description";
+    private static final String KEY_User = "UserID";
+    private static final String KEY_Brand = "Brand";
+    private static final String KEY_Model = "Model";
+    private static final String KEY_Year = "Year";
+    private static final String KEY_Color = "Color";
+    private static final String KEY_Plat = "Plate";
+    private static final String KEY_Gov = "Cov";
+    private static final String KEY_City = "City";
 
-    private EditText editTextTitle;
-    private EditText editTextDescription;
+    private EditText editTextBrand;
+    private EditText editTextModel;
+    private EditText editTextYear;
+    private EditText editTextColor;
+    private EditText editTextPlate;
+    private EditText editTextGov;
+    private EditText editTextCity;
+
     private TextView textViewData;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private DocumentReference noteRef = db.collection("Cars").document("Brands");
+
+    private DocumentReference carRef =  db.collection("Cars").document("aa");
+    private CollectionReference carsRef =  db.collection("Cars");
 
 
     @Override
@@ -37,8 +51,15 @@ public class Test_Data extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test__data);
 
-        editTextTitle = (EditText) findViewById(R.id.editText_title);
-        editTextDescription = (EditText) findViewById(R.id.editText_desc);
+        editTextBrand = (EditText) findViewById(R.id.editText_brand);
+        editTextModel = (EditText) findViewById(R.id.editText_model);
+        editTextYear = (EditText) findViewById(R.id.editText_year);
+        editTextColor = (EditText) findViewById(R.id.editText_color);
+        editTextPlate = (EditText) findViewById(R.id.editText_plate);
+        editTextGov = (EditText) findViewById(R.id.editText_gov);
+        editTextCity = (EditText) findViewById(R.id.editText_city);
+
+
         textViewData = (TextView) findViewById(R.id.textView_Data);
 
 
@@ -48,27 +69,29 @@ public class Test_Data extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void saveNote(View view) {
-        String title = editTextTitle.getText().toString();
-        String desc = editTextDescription.getText().toString();
+    public void addCar(View view) {
+        String userId = LogIn_Activity.UserID;
+        String brand = editTextBrand.getText().toString();
+        String model = editTextModel.getText().toString();
+        String year = editTextYear.getText().toString();
+        String color = editTextColor.getText().toString();
+        String platNo = editTextPlate.getText().toString();
+        String gov = editTextGov.getText().toString();
+        String city = editTextCity.getText().toString();
 
-        Map<String, Object> note = new HashMap<>();
-        note.put(KEY_TITLE, title);
-        note.put(KEY_DESCRIPTION, desc);
+
+        Cars cars = new Cars(userId,brand,model,year,color,platNo,gov,city);
 
 
-        noteRef.set(note)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(Test_Data.this, "Note Saved ", Toast.LENGTH_SHORT).show();
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+        carsRef.add(cars).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(Test_Data.this, "Done", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(Test_Data.this, "Not Saved", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(Test_Data.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -76,29 +99,10 @@ public class Test_Data extends AppCompatActivity {
 
     public void loadNote(View view) {
 
-        noteRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            String title = documentSnapshot.getString(KEY_TITLE);
-                            String desc = documentSnapshot.getString(KEY_DESCRIPTION);
+  //      carsRef.document().getId();
+        CollectionReference aaaa = carsRef.document("KS08HIkQwKLxDCyoiqip").getParent();
 
-                            textViewData.setText(title + "\n" + desc);
 
-                        } else {
-                            Toast.makeText(Test_Data.this, "document not exist", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-                Toast.makeText(Test_Data.this, "Error", Toast.LENGTH_SHORT).show();
-
-            }
-        });
 
 
     }

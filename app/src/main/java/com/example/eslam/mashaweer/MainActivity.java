@@ -30,135 +30,41 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity  {
 
-    FirebaseAuth mAuth ;
-    FirebaseAuth.AuthStateListener mAuthListner ;
-    Button any , google;
-
-    String User;
-    TextView Dname;
-
-    private static final String TAG = "GoogleActivity";
-    private static final int RC_SIGN_IN = 9001;
-    private GoogleApiClient mGoogleApiClient ;
-
-    ProgressBar progressBar;
+    Timer timer ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        google = (Button)findViewById(R.id.google);
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
-Dname = (TextView)findViewById(R.id.textView);
+        );
 
 
-
-
-        GoogleSignInOptions gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
-
-        mAuth=FirebaseAuth.getInstance();
-        mAuthListner=new FirebaseAuth.AuthStateListener() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user!=null){
-
-                    User = user.getDisplayName();
-                    Dname.setText(User);
-
-                    Toast.makeText(MainActivity.this,user.getEmail(),Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(getApplicationContext(),Test_Data.class));
-
-
-                }
+            public void run() {
+                Intent intent = new Intent(MainActivity.this, LogIn_Activity.class);
+                startActivity(intent);
+                finish();
             }
-
-            public void deletUser(){
-
-            }
-        };
-
-
-
+        }, 3000);
 
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListner);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAuth.removeAuthStateListener(mAuthListner);
-        finish();
-    }
-
-    public void googleclick(View view) {
-
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-            startActivityForResult(signInIntent,RC_SIGN_IN);
-
-
-
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-
-        if (requestCode==RC_SIGN_IN){
-            GoogleSignInResult result =Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()){
-                GoogleSignInAccount account = result.getSignInAccount();
-                firbaseAuthWithGoogle(account);
-            }
-        }
-    }
-
-    private void firbaseAuthWithGoogle(GoogleSignInAccount acct){
-
-        progressBar.setVisibility(View.VISIBLE);
-
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(),null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()){
-                            Toast.makeText(MainActivity.this,"Failed",Toast.LENGTH_LONG).show();
-
-                        }
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-                });
-    }
-
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-
 }

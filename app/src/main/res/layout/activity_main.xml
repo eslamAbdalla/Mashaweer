@@ -6,43 +6,5 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/google"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:onClick="googleclick"
-            android:text="google"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="204dp"
-            tools:layout_editor_absoluteY="231dp" />
-
-        <Button
-            android:id="@+id/out"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="any"
-            android:onClick="out"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="231dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-    </LinearLayout>
 
 </RelativeLayout>
