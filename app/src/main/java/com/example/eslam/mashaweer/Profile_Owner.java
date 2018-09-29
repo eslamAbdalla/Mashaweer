@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,26 +17,34 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class Profile_Owner extends AppCompatActivity {
+import java.util.ArrayList;
 
-    TextView DisplayName,UserType,Cars ;
+public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.ItemClickListener {
+
+    TextView DisplayName, UserType, Cars;
+
+    Cars_Adapter adapter;
+
+    ArrayList<String> carBrandName = new ArrayList<>();
+    ArrayList<String> carModel = new ArrayList<>();
+    ArrayList<String> carYear = new ArrayList<>();
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef =  db.collection("Users");
-    private CollectionReference carsRef =  db.collection("Cars");
+    private CollectionReference usersRef = db.collection("Users");
+    private CollectionReference carsRef = db.collection("Cars");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile__owner);
 
-        Cars = (TextView)findViewById(R.id.cars);
+        Cars = (TextView) findViewById(R.id.cars);
 
-        DisplayName = (TextView)findViewById(R.id.displayname);
-        UserType = (TextView)findViewById(R.id.user_Type_O);
+        DisplayName = (TextView) findViewById(R.id.displayname);
+        UserType = (TextView) findViewById(R.id.user_Type_O);
 
-        usersRef.whereEqualTo("userID",LogIn_Activity.UserID)
+        usersRef.whereEqualTo("userID", LogIn_Activity.UserID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -62,15 +73,6 @@ public class Profile_Owner extends AppCompatActivity {
                 });
 
 
-
-
-
-
-
-
-
-
-
 //
 //
 //        DisplayName = (TextView)findViewById(R.id.displayname);
@@ -84,12 +86,12 @@ public class Profile_Owner extends AppCompatActivity {
 
     public void addCars(View view) {
 
-        startActivity(new Intent(Profile_Owner.this,Test_Data.class));
+        startActivity(new Intent(Profile_Owner.this, Test_Data.class));
     }
 
     public void getCars(View view) {
 
-        carsRef//.whereEqualTo("userID",LogIn_Activity.UserID)
+        carsRef.whereEqualTo("userID",LogIn_Activity.UserID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -104,16 +106,36 @@ public class Profile_Owner extends AppCompatActivity {
                             String brand = car.getBrand();
                             String model = car.getModel();
                             String color = car.getColor();
+                            String year = car.getYear();
                             String plate = car.getPlatNo();
                             String gov = car.getGov();
                             String city = car.getCity();
 
-                            cars += userId + "\n" +brand + "\n"+ model + "\n" + color + "\n "+ plate + "\n"+ gov + "\n" + city +"\n\n";
+                            carBrandName.add(brand);
+                            carModel.add(model);
+                            carYear.add(year);
+//                           cars += userId + "\n" + brand + "\n" + model + "\n" + color + "\n " + plate + "\n" + gov + "\n" + city + "\n\n";
 
 
-                            Cars.setText(cars);
+//                             Cars.setText(cars);
 
                         }
+
+
+                        // set up the RecyclerView
+                        RecyclerView recyclerView = findViewById(R.id.rvCars);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Profile_Owner.this));
+                        adapter = new Cars_Adapter(Profile_Owner.this, carBrandName,carModel,carYear);
+                        adapter.setClickListener(Profile_Owner.this);
+                        recyclerView.setAdapter(adapter);
+
+
+
+
+
+
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -124,5 +146,15 @@ public class Profile_Owner extends AppCompatActivity {
                 });
 
 
+
+
     }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    }
+
+
 }
+
