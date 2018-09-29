@@ -113,7 +113,7 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
                     Toast.makeText(LogIn_Activity.this,user.getEmail(),Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(getApplicationContext(),Profile_Owner.class));
+
 
                 }
             }
@@ -206,6 +206,7 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),Profile_Owner.class));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
