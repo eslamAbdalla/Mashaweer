@@ -114,10 +114,6 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
                             carBrandName.add(brand);
                             carModel.add(model);
                             carYear.add(year);
-//                           cars += userId + "\n" + brand + "\n" + model + "\n" + color + "\n " + plate + "\n" + gov + "\n" + city + "\n\n";
-
-
-//                             Cars.setText(cars);
 
                         }
 

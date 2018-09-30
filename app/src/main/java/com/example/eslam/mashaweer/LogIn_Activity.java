@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -38,12 +42,13 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
     FirebaseAuth.AuthStateListener mAuthListner ;
     Button any , google;
 
+    public static String UserID ;
    public static String User,Mobile;
    public static String User_Type ="Owner";
 
 
     EditText logInName,logInMobile;
-    public static String UserID ;
+
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -54,6 +59,9 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef =  db.collection("Users");
+
+
+    String checkedUserId ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,26 +202,81 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
     public void addUser(View view) {
 
-         String userID = UserID;
-         String UserName = logInName.getText().toString();
-         String Mobile = logInMobile.getText().toString();
-         String UserType=User_Type;
+
+        // =========================================check user ==================================
+        usersRef.whereEqualTo("userID",UserID)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Users user = documentSnapshot.toObject(Users.class);
+//                            cars.setDocumentId(documentSnapshot.getId());
+
+                            checkedUserId = user.getUserID();
 
 
-         Users users = new Users(userID,UserName,Mobile,UserType);
+                        }
 
-        usersRef.add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),Profile_Owner.class));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LogIn_Activity.this, "Error", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+                        if (!UserID.equals(checkedUserId)) {
+
+
+                            String userID = UserID;  // get From Google Account
+                            String UserName = logInName.getText().toString();
+                            String Mobile = logInMobile.getText().toString();
+                            String UserType = User_Type;
+
+
+                            Users users = new Users(userID, UserName, Mobile, UserType);
+
+                            usersRef.add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(LogIn_Activity.this, "Error", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+                        else {
+                            Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+
+        //=========================================================================================
 
 
     }

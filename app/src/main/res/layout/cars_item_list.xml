@@ -1,31 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/car_row1"
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvCarBrand"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:layout_weight="1"
-        android:text="Brand " />
+        android:background="@drawable/car_row"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvCarModel"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tvCarBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Brand "
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="Model" />
+        android:background="@drawable/car_row2"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvCarYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Year" />
+        <TextView
+            android:id="@+id/tvCarModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Model"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/tvCarYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Year"
+            android:textAlignment="center" />
+    </LinearLayout>
 
 </LinearLayout>
