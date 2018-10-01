@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.ItemClickListener {
 
-    TextView DisplayName, UserType, Cars;
+    TextView DisplayName, UserType;
 
     Cars_Adapter adapter;
 
@@ -39,11 +40,12 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile__owner);
 
-        Cars = (TextView) findViewById(R.id.cars);
-
         DisplayName = (TextView) findViewById(R.id.displayname);
         UserType = (TextView) findViewById(R.id.user_Type_O);
 
+
+        getCars(null);
+//
         usersRef.whereEqualTo("userID", LogIn_Activity.UserID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -124,6 +126,7 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
                         adapter = new Cars_Adapter(Profile_Owner.this, carBrandName,carModel,carYear);
                         adapter.setClickListener(Profile_Owner.this);
                         recyclerView.setAdapter(adapter);
+                        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
 
 
 

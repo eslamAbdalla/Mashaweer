@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,11 +41,14 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
     FirebaseAuth mAuth ;
     FirebaseAuth.AuthStateListener mAuthListner ;
-    Button any , google;
+    Button any , logInGoogle;
 
     public static String UserID ;
    public static String User,Mobile;
    public static String User_Type ="Owner";
+
+   //Get Data Strings
+   String UserName ,mobile,UserType  ;
 
 
     EditText logInName,logInMobile;
@@ -55,6 +59,7 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient mGoogleApiClient ;
 
     RadioGroup Radio_G_UserType ;
+    RadioButton Owner,Renter;
     ProgressBar progressBar;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -69,10 +74,15 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_log_in_);
 
 
+        logInGoogle = (Button)findViewById(R.id.btn_Log_In);
+
+
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         logInName = (EditText)findViewById(R.id.logInName) ;
         logInMobile = (EditText)findViewById(R.id.logInMobile) ;
+        Owner = (RadioButton)findViewById(R.id.radio_owner);
+        Renter = (RadioButton)findViewById(R.id.radio_renter);
 
         Radio_G_UserType = (RadioGroup) findViewById(R.id.radio_User_Type);
 
@@ -116,15 +126,84 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
                     User = user.getDisplayName();
                     Mobile = user.getPhoneNumber();
                     UserID = user.getUid();
-                    logInName.setText(User);
-                    logInMobile.setText(Mobile);
 
-                    Toast.makeText(LogIn_Activity.this,user.getEmail(),Toast.LENGTH_LONG).show();
-                    progressBar.setVisibility(View.INVISIBLE);
+                    getUserData();
 
 
                 }
             }
+
+
+            //==========================================================================================
+public void getUserData(){
+    progressBar.setVisibility(View.VISIBLE);
+        usersRef.whereEqualTo("userID",UserID)
+                    .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Users user = documentSnapshot.toObject(Users.class);
+
+                        UserName = user.getUserName();
+                        mobile = user.getMobile();
+                        UserType = user.getUserType();
+
+
+
+                        if (UserName==null){
+                            logInName.setText(User);
+                        }else {
+                            logInName.setText(UserName);
+                        }
+
+                        if (mobile==null){
+                            logInMobile.setText(Mobile);
+                        }else {
+                            logInMobile.setText(mobile);
+                        }
+
+                        if (UserType == "Owner"){
+                            Owner.setChecked(true);
+                        }else {
+                            Renter.setChecked(true);
+                        }
+
+
+                       // Toast.makeText(LogIn_Activity.this,user.getEmail(),Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        logInGoogle.setVisibility(View.GONE);
+
+
+
+
+
+
+
+
+                    }
+
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+
+
+}
+
+
+//==========================================================================================
+
+
+
+
+
+
 
             public void deletUser(){
 
@@ -187,7 +266,7 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
                             Toast.makeText(LogIn_Activity.this,"Failed",Toast.LENGTH_LONG).show();
 
                         }
-                        progressBar.setVisibility(View.INVISIBLE);
+                      //  progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
     }
@@ -212,22 +291,15 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Users user = documentSnapshot.toObject(Users.class);
-//                            cars.setDocumentId(documentSnapshot.getId());
 
                             checkedUserId = user.getUserID();
-
-
                         }
-
-
                         if (!UserID.equals(checkedUserId)) {
-
 
                             String userID = UserID;  // get From Google Account
                             String UserName = logInName.getText().toString();
                             String Mobile = logInMobile.getText().toString();
                             String UserType = User_Type;
-
 
                             Users users = new Users(userID, UserName, Mobile, UserType);
 
@@ -249,21 +321,6 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
                             Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     }
                 })

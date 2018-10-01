@@ -24,8 +24,12 @@
         </service>
 
         <activity android:name=".Test_Data" />
-        <activity android:name=".LogIn_Activity" />
-        <activity android:name=".Profile_Owner"></activity>
+        <activity android:name=".LogIn_Activity"
+            android:windowSoftInputMode="stateHidden"
+            />
+        <activity android:name=".Profile_Owner">
+
+        </activity>
     </application>
 
 </manifest>
