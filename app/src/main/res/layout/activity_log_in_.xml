@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="User Name"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textCapSentences" />
 
                 <EditText
                     android:id="@+id/logInMobile"
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="Mobile"
-                    android:inputType="text" />
+                    android:inputType="number" />
 
                 <RadioGroup
                     android:id="@+id/radio_User_Type"
