@@ -11,10 +11,11 @@ public class Cars {
     private String platNo;
     private String gov;
     private String city;
+    private String imageUrl ;
 
     public Cars (){}
 
-    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City) {
+    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City,String ImageUrl) {
         this.userID = UserID;
         this.brand = Brand;
         this.model = Model;
@@ -23,6 +24,7 @@ public class Cars {
         this.platNo = PlatNo;
         this.gov = Gov;
         this.city = City;
+        imageUrl = ImageUrl ;
 
     }
 
@@ -56,5 +58,9 @@ public class Cars {
 
     public String getCity() {
         return city;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

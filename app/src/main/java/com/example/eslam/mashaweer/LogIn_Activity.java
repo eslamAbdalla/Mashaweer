@@ -136,6 +136,11 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
 
             //==========================================================================================
 public void getUserData(){
+//                UserName = "";
+//                mobile = "";
+//                UserType = "";
+
+
     progressBar.setVisibility(View.VISIBLE);
         usersRef.whereEqualTo("userID",UserID)
                     .get()
@@ -152,19 +157,19 @@ public void getUserData(){
 
 
 
-                        if (UserName==null){
+                        if (UserName.equals(null)){
                             logInName.setText(User);
                         }else {
                             logInName.setText(UserName);
                         }
 
-                        if (mobile==null){
+                        if (mobile.equals(null)){
                             logInMobile.setText(Mobile);
                         }else {
                             logInMobile.setText(mobile);
                         }
 
-                        if (UserType == "Owner"){
+                        if (UserType.equals("Owner")){
                             Owner.setChecked(true);
                         }else {
                             Renter.setChecked(true);
@@ -173,7 +178,9 @@ public void getUserData(){
 
                        // Toast.makeText(LogIn_Activity.this,user.getEmail(),Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.INVISIBLE);
-                        logInGoogle.setVisibility(View.GONE);
+                        //logInGoogle.setVisibility(View.GONE);
+                        logInGoogle.setBackgroundResource(R.drawable.btn_rounded_login_hidden);
+                        logInGoogle.setClickable(false);
 
 
 
@@ -319,7 +326,12 @@ public void getUserData(){
                         }
                         else {
                             Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+
+                            if (UserType.equals("Renter")) {
+                                startActivity(new Intent(getApplicationContext(), Car_Request.class));
+                            }else if (UserType.equals("Owner")){
+                                startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+                            }
                         }
 
                     }

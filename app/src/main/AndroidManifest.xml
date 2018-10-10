@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.eslam.mashaweer">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,12 +26,12 @@
         </service>
 
         <activity android:name=".Test_Data" />
-        <activity android:name=".LogIn_Activity"
-            android:windowSoftInputMode="stateHidden"
-            />
-        <activity android:name=".Profile_Owner">
-
-        </activity>
+        <activity
+            android:name=".LogIn_Activity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".Profile_Owner" />
+        <activity android:name=".Car_Request" />
+        <activity android:name=".Add_Car"></activity>
     </application>
 
 </manifest>

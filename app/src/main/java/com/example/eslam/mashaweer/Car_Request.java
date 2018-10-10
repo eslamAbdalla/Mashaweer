@@ -1,6 +1,7 @@
 package com.example.eslam.mashaweer;
 
-import android.content.Intent;
+import android.content.Context;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -17,79 +18,37 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.ItemClickListener {
+public class Car_Request extends AppCompatActivity implements Car_Request_Adapter.ItemClickListener{
 
-    TextView DisplayName, UserType;
 
-    Cars_Adapter adapter;
+    Car_Request_Adapter adapter ;
 
     ArrayList<String> carBrandName = new ArrayList<>();
     ArrayList<String> carModel = new ArrayList<>();
-    ArrayList<String> carYear = new ArrayList<>();
+    ArrayList<String> uploadImages = new ArrayList<>() ;
 
+    private Context mContext;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference usersRef = db.collection("Users");
     private CollectionReference carsRef = db.collection("Cars");
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile__owner);
-
-        DisplayName = (TextView) findViewById(R.id.displayname);
-        UserType = (TextView) findViewById(R.id.user_Type_O);
+        setContentView(R.layout.activity_car__request);
 
 
         getCars(null);
-//
-        usersRef.whereEqualTo("userID", LogIn_Activity.UserID)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Users user = documentSnapshot.toObject(Users.class);
-                            user.setDocumentId(documentSnapshot.getId());
-
-                            String userId = user.getUserID();
-                            String userName = user.getUserName();
-                            String userType = user.getUserType();
-                            String mobile = user.getMobile();
-
-                            DisplayName.setText(userName);
-                            UserType.setText(userType);
-
-
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-
-
-//
-//
-//        DisplayName = (TextView)findViewById(R.id.displayname);
-//        UserType = (TextView)findViewById(R.id.user_Type_O);
-//
-//        DisplayName.setText(LogIn_Activity.User);
-//        UserType.setText(LogIn_Activity.User_Type);
 
 
     }
 
-    public void addCars(View view) {
-
-        startActivity(new Intent(Profile_Owner.this, Add_Car.class));
-    }
 
     public void getCars(View view) {
 
@@ -112,19 +71,24 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
                             String plate = car.getPlatNo();
                             String gov = car.getGov();
                             String city = car.getCity();
+                            String imagUrl = car.getImageUrl();
+                          //  ImageView carImage  ;
 
                             carBrandName.add(brand);
                             carModel.add(model);
-                            carYear.add(year);
+                            uploadImages.add(imagUrl);
+
+                            //uploadImages.add(Picasso.with(mContext).load(imagUrl).fit().centerCrop().into(carImage));
+
 
                         }
 
 
                         // set up the RecyclerView
-                        RecyclerView recyclerView = findViewById(R.id.rvCars);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(Profile_Owner.this));
-                        adapter = new Cars_Adapter(Profile_Owner.this, carBrandName,carModel,carYear);
-                        adapter.setClickListener(Profile_Owner.this);
+                        RecyclerView recyclerView = findViewById(R.id.rvCars_Requests);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Car_Request.this));
+                        adapter = new Car_Request_Adapter(Car_Request.this, carBrandName,carModel,uploadImages);
+                        adapter.setClickListener(Car_Request.this);
                         recyclerView.setAdapter(adapter);
                         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
 
@@ -148,5 +112,7 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
     }
 
 
-}
 
+
+
+}

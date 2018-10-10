@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Add_Car">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <EditText
+            android:id="@+id/editText_brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Brand" />
+
+        <EditText
+            android:id="@+id/editText_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Model" />
+        <EditText
+            android:id="@+id/editText_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Year" />
+
+        <EditText
+            android:id="@+id/editText_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Color" />
+
+        <EditText
+            android:id="@+id/editText_plate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Plate NO" />
+
+        <EditText
+            android:id="@+id/editText_gov"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="Gov" />
+
+        <EditText
+            android:id="@+id/editText_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textCapSentences"
+            android:hint="City" />
+
+        <Button
+            android:id="@+id/btn_choose_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose Image" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="26dp"
+            android:text="upload" />
+        <ImageView
+            android:id="@+id/image_view_upload_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+ />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_upload_imag"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_upload"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnSaveCar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="saveCar"
+            android:text="save" />
+
+
+<TextView
+    android:id="@+id/Test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text=""/>
+
+
+
+
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign out"
+            android:onClick="out"
+             />
+
+    </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
