@@ -52,13 +52,14 @@ public class Add_Car extends AppCompatActivity {
 
     private ImageView imageView;
 
-    private Button buttonUploadImage;
+    private Button btnAddMoreImgs;
 
     private ProgressBar uploadImageProgressBar;
 
     private TextView textViewData;
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int RESULT_LOAD_IMAGE = 1;
     private Uri imageUri;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -87,7 +88,7 @@ public class Add_Car extends AppCompatActivity {
 
         uploadImageProgressBar = findViewById(R.id.progress_bar_upload_imag);
 
-        buttonUploadImage = findViewById(R.id.btn_upload);
+        btnAddMoreImgs = findViewById(R.id.btn_moreImages);
 
         imageView = findViewById(R.id.image_view_upload_image);
 
@@ -99,7 +100,15 @@ public class Add_Car extends AppCompatActivity {
         editTextGov = (EditText) findViewById(R.id.editText_gov);
         editTextCity = (EditText) findViewById(R.id.editText_city);
 
+
         buttonChooseImage = findViewById(R.id.btn_choose_image);
+
+        btnAddMoreImgs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openMultiFileChooser();
+            }
+        });
 
         buttonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +137,19 @@ public class Add_Car extends AppCompatActivity {
 
     }
 
-//============Open phone Storage To Get File (Image )=====================================
+    //============Open phone Storage To Get Multible Files (Image )=====================================
+    private void openMultiFileChooser() {
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), RESULT_LOAD_IMAGE);
+
+    }
+
+
+    //============Open phone Storage To Get File (Image )=====================================
     private void openFileChooser() {
 
         Intent intent = new Intent();
@@ -138,7 +159,7 @@ public class Add_Car extends AppCompatActivity {
     }
 //========================================================================================
 
-//============Get File URI on Phone ======================================================
+    //============Get File URI on Phone ======================================================
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

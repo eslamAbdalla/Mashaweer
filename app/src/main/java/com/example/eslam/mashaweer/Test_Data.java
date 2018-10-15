@@ -75,9 +75,7 @@ public class Test_Data extends AppCompatActivity {
 
 
         buttonChooseImage = findViewById(R.id.btn_choose_image);
-        buttonUploadImage = findViewById(R.id.btn_upload);
-        showUploads = findViewById(R.id.text_view_show_uploads);
-        fileName = findViewById(R.id.edit_text_file_name);
+
         imageView = findViewById(R.id.image_view_upload_image);
         uploadImageProgressBar = findViewById(R.id.progress_bar_upload_imag);
 

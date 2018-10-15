@@ -1,6 +1,7 @@
 package com.example.eslam.mashaweer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,11 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
 
     ArrayList<String> carBrandName = new ArrayList<>();
     ArrayList<String> carModel = new ArrayList<>();
+    ArrayList<String> carYear = new ArrayList<>();
+    ArrayList<String> plateNo = new ArrayList<>();
     ArrayList<String> uploadImages = new ArrayList<>() ;
+
+    public static String SelectedCarPlateNo;
 
     private Context mContext;
 
@@ -52,7 +57,8 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
 
     public void getCars(View view) {
 
-        carsRef.whereEqualTo("userID",LogIn_Activity.UserID)
+        carsRef
+//                .whereEqualTo("userID",LogIn_Activity.UserID)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -76,6 +82,8 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
 
                             carBrandName.add(brand);
                             carModel.add(model);
+                            carYear.add(year);
+                            plateNo.add(plate);
                             uploadImages.add(imagUrl);
 
                             //uploadImages.add(Picasso.with(mContext).load(imagUrl).fit().centerCrop().into(carImage));
@@ -87,7 +95,7 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
                         // set up the RecyclerView
                         RecyclerView recyclerView = findViewById(R.id.rvCars_Requests);
                         recyclerView.setLayoutManager(new LinearLayoutManager(Car_Request.this));
-                        adapter = new Car_Request_Adapter(Car_Request.this, carBrandName,carModel,uploadImages);
+                        adapter = new Car_Request_Adapter(Car_Request.this, carBrandName,carModel,carYear,plateNo,uploadImages);
                         adapter.setClickListener(Car_Request.this);
                         recyclerView.setAdapter(adapter);
                         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
@@ -108,7 +116,16 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number "
+                + position, Toast.LENGTH_SHORT).show();
+
+        SelectedCarPlateNo = adapter.getItem(position);
+        startActivity(new Intent(Car_Request.this,OrderCar_Activity.class));
+
+
+
+
+
     }
 
 

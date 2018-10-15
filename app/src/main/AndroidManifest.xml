@@ -31,7 +31,9 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".Profile_Owner" />
         <activity android:name=".Car_Request" />
-        <activity android:name=".Add_Car"></activity>
+        <activity android:name=".Add_Car" />
+        <activity android:name=".OrderCar_Activity" />
+        <activity android:name=".Car_Images"></activity>
     </application>
 
 </manifest>

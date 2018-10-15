@@ -17,7 +17,9 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
 
     private ArrayList<String> carBrandName = new ArrayList<>();
     private ArrayList<String> carModel = new ArrayList<>();
+    private ArrayList<String> carYear = new ArrayList<>();
     private ArrayList<String> carImageUrl = new ArrayList<>();
+    private ArrayList<String> platNo = new ArrayList<>();
     private Context mContext;
 
     private LayoutInflater mInflater;
@@ -26,11 +28,13 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
 
 
     // data is passed into the constructor
-    public Car_Request_Adapter(Context context, ArrayList<String> carBrandName , ArrayList<String> carModel,ArrayList<String> carImage) {
+    public Car_Request_Adapter(Context context, ArrayList<String> carBrandName , ArrayList<String> carModel,ArrayList<String> carYear,ArrayList<String> plateNo,ArrayList<String> carImage) {
 
         this.carBrandName = carBrandName ;
         this.carModel = carModel ;
         this.carImageUrl = carImage;
+        this.carYear = carYear ;
+        this.platNo = plateNo ;
         mContext = context ;
 
 
@@ -53,15 +57,10 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
         String uploadImageUrl = this.carImageUrl.get(position);
         holder.brandName.setText(this.carBrandName.get(position));
         holder.model.setText(this.carModel.get(position));
-        //carImage
+        holder.year.setText(this.carYear.get(position));
 
         Picasso.with(mContext).load(uploadImageUrl).fit().centerCrop().into(holder.carImageView);
-
-
-
-
     }
-
     // total number of rows
     @Override
     public int getItemCount() {
@@ -71,7 +70,7 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView brandName,model;
+        TextView brandName,model,year;
         ImageView carImageView;
 
 
@@ -79,6 +78,7 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
             super(itemView);
             brandName = itemView.findViewById(R.id.cr_brandName);
             model = itemView.findViewById(R.id.cr_model);
+            year = itemView.findViewById(R.id.cr_year);
             carImageView = itemView.findViewById(R.id.carImage);
 
 
@@ -95,8 +95,11 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
 
     // convenience method for getting data at click position
     String getItem(int id) {
-        return carBrandName.get(id);
+        return platNo.get(id);
     }
+
+
+
 
     // allows clicks events to be caught
     void setClickListener(Car_Request_Adapter.ItemClickListener itemClickListener) {
