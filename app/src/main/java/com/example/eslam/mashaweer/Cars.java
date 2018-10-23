@@ -1,5 +1,7 @@
 package com.example.eslam.mashaweer;
 
+import java.util.List;
+
 import static com.example.eslam.mashaweer.LogIn_Activity.UserID;
 
 public class Cars {
@@ -12,10 +14,11 @@ public class Cars {
     private String gov;
     private String city;
     private String imageUrl ;
+    private List<String> imageList ;
 
     public Cars (){}
 
-    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City,String ImageUrl) {
+    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City,String ImageUrl , List<String> ImageList) {
         this.userID = UserID;
         this.brand = Brand;
         this.model = Model;
@@ -25,6 +28,7 @@ public class Cars {
         this.gov = Gov;
         this.city = City;
         imageUrl = ImageUrl ;
+        imageList = ImageList ;
 
     }
 
@@ -62,5 +66,9 @@ public class Cars {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
     }
 }

@@ -22,17 +22,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Car_Request extends AppCompatActivity implements Car_Request_Adapter.ItemClickListener{
+public class Car_Request extends AppCompatActivity implements Car_Request_Adapter.ItemClickListener {
 
 
-    Car_Request_Adapter adapter ;
+    Car_Request_Adapter adapter;
 
     ArrayList<String> carBrandName = new ArrayList<>();
     ArrayList<String> carModel = new ArrayList<>();
     ArrayList<String> carYear = new ArrayList<>();
     ArrayList<String> plateNo = new ArrayList<>();
-    ArrayList<String> uploadImages = new ArrayList<>() ;
+    ArrayList<String> uploadImages = new ArrayList<>();
+
+    String imagesUrl = "" ;
+
 
     public static String SelectedCarPlateNo;
 
@@ -40,7 +44,6 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference carsRef = db.collection("Cars");
-
 
 
     @Override
@@ -77,16 +80,37 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
                             String plate = car.getPlatNo();
                             String gov = car.getGov();
                             String city = car.getCity();
-                            String imagUrl = car.getImageUrl();
-                          //  ImageView carImage  ;
+                            List<String> imagesList = car.getImageList();
+
+                            if (imagesList.size() == 0 ){
+                                imagesUrl = "null" ;
+                                uploadImages.add(imagesUrl);
+                            }else {
+
+                            for (int i = 0; i < imagesList.size(); i++) {
+
+
+
+
+                                    imagesUrl = imagesList.get(i);
+                                    uploadImages.add(imagesUrl);
+                                    if (i == 0) {
+                                        break;
+                                    }
+
+                                }
+                            }
+
+
+                            //  ImageView carImage  ;
 
                             carBrandName.add(brand);
                             carModel.add(model);
                             carYear.add(year);
                             plateNo.add(plate);
-                            uploadImages.add(imagUrl);
+//                            uploadImages.add(imagUrl);
 
-                            //uploadImages.add(Picasso.with(mContext).load(imagUrl).fit().centerCrop().into(carImage));
+//                            uploadImages.add(Picasso.with(mContext).load(imagUrl).fit().centerCrop().into(carImage));
 
 
                         }
@@ -95,7 +119,7 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
                         // set up the RecyclerView
                         RecyclerView recyclerView = findViewById(R.id.rvCars_Requests);
                         recyclerView.setLayoutManager(new LinearLayoutManager(Car_Request.this));
-                        adapter = new Car_Request_Adapter(Car_Request.this, carBrandName,carModel,carYear,plateNo,uploadImages);
+                        adapter = new Car_Request_Adapter(Car_Request.this, carBrandName, carModel, carYear, plateNo, uploadImages);
                         adapter.setClickListener(Car_Request.this);
                         recyclerView.setAdapter(adapter);
                         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
@@ -110,8 +134,6 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
                 });
 
 
-
-
     }
 
     @Override
@@ -120,16 +142,10 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
                 + position, Toast.LENGTH_SHORT).show();
 
         SelectedCarPlateNo = adapter.getItem(position);
-        startActivity(new Intent(Car_Request.this,OrderCar_Activity.class));
-
-
-
+        startActivity(new Intent(Car_Request.this, OrderCar_Activity.class));
 
 
     }
-
-
-
 
 
 }

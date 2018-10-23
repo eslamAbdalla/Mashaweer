@@ -22,13 +22,15 @@ import java.util.ArrayList;
 
 public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.ItemClickListener {
 
-    TextView DisplayName, UserType;
+    TextView DisplayName, UserType , TotalCars;
 
     Cars_Adapter adapter;
 
     ArrayList<String> carBrandName = new ArrayList<>();
     ArrayList<String> carModel = new ArrayList<>();
     ArrayList<String> carYear = new ArrayList<>();
+
+    private int carsCount ;
 
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -42,9 +44,12 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
 
         DisplayName = (TextView) findViewById(R.id.displayname);
         UserType = (TextView) findViewById(R.id.user_Type_O);
+        TotalCars = (TextView)findViewById(R.id.totalCars);
+
 
 
         getCars(null);
+
 //
         usersRef.whereEqualTo("userID", LogIn_Activity.UserID)
                 .get()
@@ -118,7 +123,8 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
                             carYear.add(year);
 
                         }
-
+                    carsCount = carBrandName.size();
+                        TotalCars.setText(""+carsCount);
 
                         // set up the RecyclerView
                         RecyclerView recyclerView = findViewById(R.id.rvCars);

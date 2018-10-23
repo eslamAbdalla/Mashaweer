@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -52,14 +54,27 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(Car_Request_Adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final Car_Request_Adapter.ViewHolder holder, int position) {
 
         String uploadImageUrl = this.carImageUrl.get(position);
         holder.brandName.setText(this.carBrandName.get(position));
         holder.model.setText(this.carModel.get(position));
         holder.year.setText(this.carYear.get(position));
 
-        Picasso.with(mContext).load(uploadImageUrl).fit().centerCrop().into(holder.carImageView);
+
+
+        Picasso.get().load(uploadImageUrl).fit().centerCrop().into(holder.carImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.imageProgressBar.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                holder.imageProgressBar.setVisibility(View.GONE);
+            }
+        });
     }
     // total number of rows
     @Override
@@ -72,6 +87,7 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView brandName,model,year;
         ImageView carImageView;
+        ProgressBar imageProgressBar ;
 
 
         public ViewHolder(View itemView) {
@@ -80,6 +96,7 @@ public class Car_Request_Adapter extends RecyclerView.Adapter<Car_Request_Adapte
             model = itemView.findViewById(R.id.cr_model);
             year = itemView.findViewById(R.id.cr_year);
             carImageView = itemView.findViewById(R.id.carImage);
+            imageProgressBar = itemView.findViewById(R.id.cr_progressBar);
 
 
 

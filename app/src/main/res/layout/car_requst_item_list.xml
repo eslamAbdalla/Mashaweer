@@ -24,6 +24,13 @@
                 android:scaleType="centerCrop"
 
                 />
+            <ProgressBar
+                android:id="@+id/cr_progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@android:color/holo_orange_dark"
+                tools:targetApi="lollipop" />
 
         </RelativeLayout>
 

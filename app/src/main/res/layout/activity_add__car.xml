@@ -83,14 +83,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_moreImages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="26dp"
-            android:text="Add More imgs" />
+
         <ImageView
             android:id="@+id/image_view_upload_image"
             android:layout_width="100dp"
@@ -107,7 +100,8 @@
             android:layout_above="@+id/btn_moreImages"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="16dp"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            />
 
         <Button
             android:id="@+id/btnSaveCar"
