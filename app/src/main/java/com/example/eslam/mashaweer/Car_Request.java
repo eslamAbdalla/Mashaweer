@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -50,11 +51,23 @@ public class Car_Request extends AppCompatActivity implements Car_Request_Adapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car__request);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getCars(null);
 
 
+    }
+    // ================================= Action for Back Button in ActionBar==============================
+    public boolean onOptionsItemSelected (MenuItem item){
+
+        if (LogIn_Activity.UserType.equals("Renter")) {
+            startActivity(new Intent(getApplicationContext(), Car_Request.class));
+        }else if (LogIn_Activity.UserType.equals("Owner")){
+            startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+        }
+
+
+        return true;
     }
 
 

@@ -31,13 +31,16 @@
         <activity
             android:name=".LogIn_Activity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".Profile_Owner" />
-        <activity android:name=".Car_Request" />
+        <activity android:name=".Profile_Owner"
+            android:label="Profile"/>
+        <activity android:name=".Car_Request"
+            android:label="Recuest Car"/>
         <activity
             android:name=".Add_Car"
-            android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".OrderCar_Activity" />
-        <activity android:name=".Car_Images"></activity>
+            android:windowSoftInputMode="stateHidden"
+            android:label="Add Car"/>
+        <activity android:name=".OrderCar_Activity"
+            android:label="Order Car"/>
     </application>
 
 </manifest>

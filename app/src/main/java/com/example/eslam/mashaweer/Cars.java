@@ -2,7 +2,7 @@ package com.example.eslam.mashaweer;
 
 import java.util.List;
 
-import static com.example.eslam.mashaweer.LogIn_Activity.UserID;
+
 
 public class Cars {
     private String userID;
@@ -13,12 +13,12 @@ public class Cars {
     private String platNo;
     private String gov;
     private String city;
-    private String imageUrl ;
+
     private List<String> imageList ;
 
     public Cars (){}
 
-    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City,String ImageUrl , List<String> ImageList) {
+    public Cars(String UserID, String Brand, String Model, String Year, String Color, String PlatNo, String Gov, String City, List<String> ImageList) {
         this.userID = UserID;
         this.brand = Brand;
         this.model = Model;
@@ -27,7 +27,7 @@ public class Cars {
         this.platNo = PlatNo;
         this.gov = Gov;
         this.city = City;
-        imageUrl = ImageUrl ;
+
         imageList = ImageList ;
 
     }
@@ -64,11 +64,59 @@ public class Cars {
         return city;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+
 
     public List<String> getImageList() {
         return imageList;
+    }
+}
+
+
+class Brands {
+    private String brands ;
+
+    public Brands (){}
+
+    public Brands (String brands ) {
+        this.brands = brands ;
+
+    }
+
+    public String getBrands() {
+        return brands;
+    }
+}
+
+
+class Models {
+    private String brand ;
+    private String models;
+
+
+
+    public Models (){}
+
+    public Models (String brand, String model ) {
+        this.brand = brand;
+        this.models = model;
+
+
+
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setModel(String model) {
+        this.models = model;
+    }
+
+    public String getModels() {
+        return models;
+    }
+
+    public String getBrand() {
+        return brand;
     }
 }

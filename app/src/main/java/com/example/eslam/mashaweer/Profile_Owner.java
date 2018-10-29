@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +42,8 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile__owner);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         DisplayName = (TextView) findViewById(R.id.displayname);
         UserType = (TextView) findViewById(R.id.user_Type_O);
@@ -89,6 +92,13 @@ public class Profile_Owner extends AppCompatActivity implements Cars_Adapter.Ite
 //        UserType.setText(LogIn_Activity.User_Type);
 
 
+    }
+
+    public boolean onOptionsItemSelected (MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivityForResult(myIntent, 0);
+
+        return true;
     }
 
     public void addCars(View view) {

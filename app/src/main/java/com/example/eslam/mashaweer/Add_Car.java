@@ -18,12 +18,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +54,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Add_Car extends AppCompatActivity {
+public class Add_Car extends AppCompatActivity  {
 
 //=============== User Input ====================================
-    private EditText editTextBrand;
-    private EditText editTextModel;
+//    private EditText editTextBrand;
+//    private EditText editTextModel;
     private EditText editTextYear;
     private EditText editTextColor;
     private EditText editTextPlate;
@@ -74,6 +78,7 @@ public class Add_Car extends AppCompatActivity {
     private ImageView imageView;
 
 
+    ProgressBar addCarProgressBar;
 
     private ProgressBar uploadImageProgressBar;
 
@@ -88,6 +93,8 @@ public class Add_Car extends AppCompatActivity {
     private Button buttonChooseImage;
 
     private CollectionReference carsRef = db.collection("Cars");
+    private CollectionReference brandsRef = db.collection("Brands");
+    private CollectionReference modelsRef = db.collection("Models");
 
     private StorageReference carsImageStorageRef;
 
@@ -95,6 +102,13 @@ public class Add_Car extends AppCompatActivity {
 
     private int imageAdded ;
 
+    private Spinner spinner_Brands,spinner_Models ;
+    private List<String> Brands = new ArrayList<>();
+    private List<String> Models  = new ArrayList<>();
+
+    private String selected_Brand ,selected_Model ;
+
+    ArrayAdapter<String> models_Adapter ;
 
     StorageTask storageTask;
 
@@ -104,7 +118,20 @@ public class Add_Car extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add__car);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         saveCareButton = (Button) findViewById(R.id.btnSaveCar);
+        spinner_Brands = (Spinner)findViewById(R.id.sp_brands);
+        spinner_Models = (Spinner)findViewById(R.id.sp_model);
+        addCarProgressBar = (ProgressBar)findViewById(R.id.progressBar_add_car);
+
+
+        Brands.add("All");
+//        Models.add("All");
+
+//        getModels();
+        getBrands(null);
+
 
 
 
@@ -114,8 +141,8 @@ public class Add_Car extends AppCompatActivity {
 
         imageView = findViewById(R.id.image_view_upload_image);
 
-        editTextBrand = (EditText) findViewById(R.id.editText_brand);
-        editTextModel = (EditText) findViewById(R.id.editText_model);
+//        editTextBrand = (EditText) findViewById(R.id.editText_brand);
+//        editTextModel = (EditText) findViewById(R.id.editText_model);
         editTextYear = (EditText) findViewById(R.id.editText_year);
         editTextColor = (EditText) findViewById(R.id.editText_color);
         editTextPlate = (EditText) findViewById(R.id.editText_plate);
@@ -125,12 +152,6 @@ public class Add_Car extends AppCompatActivity {
 
         buttonChooseImage = findViewById(R.id.btn_choose_image);
 
-//        btnAddMoreImgs.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openMultiFileChooser();
-//            }
-//        });
 
         buttonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,8 +160,6 @@ public class Add_Car extends AppCompatActivity {
                 buttonChooseImage.setClickable(false);
 
 
-
-//                openFileChooser();
                 openMultiFileChooser();
 
             }
@@ -161,7 +180,64 @@ public class Add_Car extends AppCompatActivity {
 //        });
 //========================================================================================
 
+        ArrayAdapter<String> brands_Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Brands);
+        spinner_Brands.setAdapter(brands_Adapter);
 
+         models_Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Models);
+        spinner_Models.setAdapter(models_Adapter);
+
+
+
+
+
+        spinner_Brands.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               selected_Brand = parent.getSelectedItem().toString();
+
+               if (selected_Brand.equals("All")){
+                   getModels();
+               }else {
+                   getModelsForSelectedBrand();
+               }
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner_Models.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                selected_Model = parent.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+    // ================================= Action for Back Button in ActionBar==============================
+    public boolean onOptionsItemSelected (MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), Profile_Owner.class);
+        startActivityForResult(myIntent, 0);
+
+        return true;
     }
 
     //============Open phone Storage To Get Multible Files (Image )=====================================
@@ -191,6 +267,7 @@ public class Add_Car extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        addCarProgressBar.setVisibility(View.VISIBLE);
 //=========================Check Car =====================================================
         platNo = editTextPlate.getText().toString().replace(" ","");
 
@@ -300,6 +377,7 @@ public class Add_Car extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
+                            addCarProgressBar.setVisibility(View.GONE);
 //========== Display Uploaded Image ========================================================
                             Picasso.get().load(imageUri).into(imageView);
 //========== Reset Progress Bar After Finish ===============================================
@@ -342,6 +420,7 @@ public class Add_Car extends AppCompatActivity {
     //=========== Save Button Click Actions ===================================================
     public void saveCar(View view) {
         saveCareButton.setClickable(false);
+
 //        uploadFile();
         addCar(null);
     }
@@ -376,14 +455,18 @@ public class Add_Car extends AppCompatActivity {
 
 
                             String userId = LogIn_Activity.UserID;
-                            String brand = editTextBrand.getText().toString();
-                            String model = editTextModel.getText().toString();
+//                            String brand = editTextBrand.getText().toString();
+//                            String model = editTextModel.getText().toString();
+
+                            String brand = selected_Brand;
+                            String model = selected_Model;
+
                             String year = editTextYear.getText().toString();
                             String color = editTextColor.getText().toString();
                             String gov = editTextGov.getText().toString();
                             String city = editTextCity.getText().toString();
 
-                            Cars cars = new Cars(userId, brand, model, year, color, platNo, gov, city, imageUrl , imageUrlList);
+                            Cars cars = new Cars(userId, brand, model, year, color, platNo, gov, city, imageUrlList);
 
                             carsRef.add(cars).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
@@ -423,5 +506,111 @@ public class Add_Car extends AppCompatActivity {
 
 
     }
+
+
+    public void getBrands(View view) {
+
+
+
+        brandsRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Brands brand = documentSnapshot.toObject(Brands.class);
+
+                            String Brand = brand.getBrands();
+                            Brands.add(Brand);
+
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+    }
+
+    public void getModels() {
+        Models = new ArrayList<>();
+        Models.add("All");
+
+        modelsRef
+//                .whereEqualTo("brand",selected_Brand)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String cars = "";
+
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Models models = documentSnapshot.toObject(Models.class);
+//                            cars.setDocumentId(documentSnapshot.getId());
+
+                            String model = models.getModels();
+                            String brand = models.getBrand();
+                            Models.add(model);
+                                                 }
+                        models_Adapter = new ArrayAdapter<>(Add_Car.this, android.R.layout.simple_spinner_dropdown_item, Models);
+                        spinner_Models.setAdapter(models_Adapter);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+    }
+
+
+    public void getModelsForSelectedBrand() {
+
+        Models = new ArrayList<>();
+        Models.add("All");
+
+        modelsRef
+                .whereEqualTo("brand",selected_Brand)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String cars = "";
+
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Models models = documentSnapshot.toObject(Models.class);
+//                            cars.setDocumentId(documentSnapshot.getId());
+
+                            String model = models.getModels();
+                            String brand = models.getBrand();
+                            Models.add(model);
+                        }
+
+                        models_Adapter = new ArrayAdapter<>(Add_Car.this, android.R.layout.simple_spinner_dropdown_item, Models);
+                        spinner_Models.setAdapter(models_Adapter);
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+
+    }
+
+
 
 }

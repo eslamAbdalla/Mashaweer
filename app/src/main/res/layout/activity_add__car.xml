@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
 
     <LinearLayout
@@ -18,27 +19,45 @@
 
 
 
-        <EditText
-            android:id="@+id/editText_brand"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textCapSentences"
-            android:hint="Brand" />
 
-        <EditText
-            android:id="@+id/editText_model"
+
+        <Spinner
+            android:id="@+id/sp_brands"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textCapSentences"
-            android:hint="Model" />
+            android:layout_margin="10dp" />
+
+        <Spinner
+            android:id="@+id/sp_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp" />
+
+
+
+        <!--<EditText-->
+            <!--android:id="@+id/editText_brand"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textCapSentences"-->
+            <!--android:hint="Brand" />-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/editText_model"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ems="10"-->
+            <!--android:inputType="textCapSentences"-->
+            <!--android:hint="Model" />-->
         <EditText
             android:id="@+id/editText_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textCapSentences"
+            android:inputType="number"
             android:hint="Year" />
 
         <EditText
@@ -83,6 +102,12 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <ProgressBar
+                android:id="@+id/progressBar_add_car"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/image_view_upload_image"

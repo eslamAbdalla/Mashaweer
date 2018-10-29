@@ -48,7 +48,7 @@ public class LogIn_Activity extends AppCompatActivity implements GoogleApiClient
    public static String User_Type ="Owner";
 
    //Get Data Strings
-   String UserName ,mobile,UserType  ;
+  public static String UserName ,mobile,UserType  ;
 
 
     EditText logInName,logInMobile;
