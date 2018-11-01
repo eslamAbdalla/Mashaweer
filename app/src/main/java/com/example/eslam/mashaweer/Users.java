@@ -14,6 +14,7 @@ public class Users {
 
 
     public Users(String UserID, String UserName, String Mobile, String UserType) {
+        this.documentId = documentId ;
         this.userID = UserID;
         this.userName = UserName;
         this.mobile = Mobile;

@@ -157,13 +157,13 @@ public void getUserData(){
 
 
 
-                        if (UserName.equals(null)){
+                        if (UserName.equals(null)|| UserName ==""){
                             logInName.setText(User);
                         }else {
                             logInName.setText(UserName);
                         }
 
-                        if (mobile.equals(null)){
+                        if (mobile.equals(null)||mobile==""){
                             logInMobile.setText(Mobile);
                         }else {
                             logInMobile.setText(mobile);
@@ -197,6 +197,9 @@ public void getUserData(){
                 @Override
                 public void onFailure(@NonNull Exception e) {
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    Toast.makeText(getApplicationContext(),"User Not Found",Toast.LENGTH_LONG).show();
+
                 }
             });
 
@@ -205,14 +208,34 @@ public void getUserData(){
 
 
 //==========================================================================================
-
-
-
-
-
-
-
+//todo creat update method
             public void deletUser(){
+
+
+
+          usersRef.whereEqualTo("userID",UserID)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Users user = documentSnapshot.toObject(Users.class);
+
+                                    checkedUserId = user.getUserID();
+                                    user.getDocumentId();
+
+                                }
+
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
 
             }
         };
@@ -286,8 +309,8 @@ public void getUserData(){
     }
 
 
-    public void addUser(View view) {
-
+    public void confirmUser(View view) {
+//todo ==================== save document id =====================
 
         // =========================================check user ==================================
         usersRef.whereEqualTo("userID",UserID)
@@ -310,9 +333,11 @@ public void getUserData(){
 
                             Users users = new Users(userID, UserName, Mobile, UserType);
 
-                            usersRef.add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            DocumentReference user = usersRef.document(UserID);
+
+                            user.set(users).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                                public void onSuccess(Void avoid) {
                                     Toast.makeText(LogIn_Activity.this, "Done", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
                                 }
@@ -330,7 +355,7 @@ public void getUserData(){
                             if (UserType.equals("Renter")) {
                                 startActivity(new Intent(getApplicationContext(), Car_Request.class));
                             }else if (UserType.equals("Owner")){
-                                startActivity(new Intent(getApplicationContext(), Profile_Owner.class));
+                                startActivity(new Intent(getApplicationContext(), Test_Data.class));
                             }
                         }
 

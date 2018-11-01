@@ -1,8 +1,6 @@
 package com.example.eslam.mashaweer;
 
 
-
-
 //Todo ================= Check Plate no If Empty ===================
 //Todo =================  ===================
 
@@ -54,9 +52,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Add_Car extends AppCompatActivity  {
+public class Add_Car extends AppCompatActivity {
 
-//=============== User Input ====================================
+    //=============== User Input ====================================
 //    private EditText editTextBrand;
 //    private EditText editTextModel;
     private EditText editTextYear;
@@ -66,14 +64,14 @@ public class Add_Car extends AppCompatActivity  {
     private EditText editTextCity;
     private String platNo;
 
-//========= URL ==============================
+    //========= URL ==============================
     private String imageUrl;
-    private String URL ;
-    private List<String> imageUrlList = new ArrayList<>() ;
+    private String URL;
+    private List<String> imageUrlList = new ArrayList<>();
 
 
-    private String imageName ;
-    private String plate ;
+    private String imageName;
+    private String plate;
 
     private ImageView imageView;
 
@@ -81,7 +79,6 @@ public class Add_Car extends AppCompatActivity  {
     ProgressBar addCarProgressBar;
 
     private ProgressBar uploadImageProgressBar;
-
 
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -100,15 +97,15 @@ public class Add_Car extends AppCompatActivity  {
 
     private Button saveCareButton;
 
-    private int imageAdded ;
+    private int imageAdded;
 
-    private Spinner spinner_Brands,spinner_Models ;
+    private Spinner spinner_Brands, spinner_Models;
     private List<String> Brands = new ArrayList<>();
-    private List<String> Models  = new ArrayList<>();
+    private List<String> Models = new ArrayList<>();
 
-    private String selected_Brand ,selected_Model ;
+    private String selected_Brand, selected_Model;
 
-    ArrayAdapter<String> models_Adapter ;
+    ArrayAdapter<String> models_Adapter;
 
     StorageTask storageTask;
 
@@ -121,9 +118,9 @@ public class Add_Car extends AppCompatActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         saveCareButton = (Button) findViewById(R.id.btnSaveCar);
-        spinner_Brands = (Spinner)findViewById(R.id.sp_brands);
-        spinner_Models = (Spinner)findViewById(R.id.sp_model);
-        addCarProgressBar = (ProgressBar)findViewById(R.id.progressBar_add_car);
+        spinner_Brands = (Spinner) findViewById(R.id.sp_brands);
+        spinner_Models = (Spinner) findViewById(R.id.sp_model);
+        addCarProgressBar = (ProgressBar) findViewById(R.id.progressBar_add_car);
 
 
         Brands.add("All");
@@ -133,10 +130,7 @@ public class Add_Car extends AppCompatActivity  {
         getBrands(null);
 
 
-
-
         uploadImageProgressBar = findViewById(R.id.progress_bar_upload_imag);
-
 
 
         imageView = findViewById(R.id.image_view_upload_image);
@@ -183,24 +177,20 @@ public class Add_Car extends AppCompatActivity  {
         ArrayAdapter<String> brands_Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Brands);
         spinner_Brands.setAdapter(brands_Adapter);
 
-         models_Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Models);
+        models_Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, Models);
         spinner_Models.setAdapter(models_Adapter);
-
-
-
 
 
         spinner_Brands.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               selected_Brand = parent.getSelectedItem().toString();
+                selected_Brand = parent.getSelectedItem().toString();
 
-               if (selected_Brand.equals("All")){
-                   getModels();
-               }else {
-                   getModelsForSelectedBrand();
-               }
-
+                if (selected_Brand.equals("All")) {
+                    getModels();
+                } else {
+                    getModelsForSelectedBrand();
+                }
 
 
             }
@@ -224,33 +214,23 @@ public class Add_Car extends AppCompatActivity  {
             }
         });
 
-
-
-
-
-
     }
 
-
     // ================================= Action for Back Button in ActionBar==============================
-    public boolean onOptionsItemSelected (MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent myIntent = new Intent(getApplicationContext(), Profile_Owner.class);
         startActivityForResult(myIntent, 0);
-
         return true;
     }
 
     //============Open phone Storage To Get Multible Files (Image )=====================================
     private void openMultiFileChooser() {
-
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Images"), RESULT_LOAD_IMAGE);
-
     }
-
 
     //============Open phone Storage To Get File (Image )=====================================
 //    private void openFileChooser() {
@@ -261,74 +241,52 @@ public class Add_Car extends AppCompatActivity  {
 //        startActivityForResult(intent, PICK_IMAGE_REQUEST);
 //    }
 //========================================================================================
-
-    //============Get File URI on Phone ======================================================
+//============Get File URI on Phone ======================================================
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         addCarProgressBar.setVisibility(View.VISIBLE);
 //=========================Check Car =====================================================
-        platNo = editTextPlate.getText().toString().replace(" ","");
+        platNo = editTextPlate.getText().toString().replace(" ", "");
 
-        carsRef.whereEqualTo("platNo",platNo)
+        carsRef.whereEqualTo("platNo", platNo)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         String cars = "";
-
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Cars car = documentSnapshot.toObject(Cars.class);
 //                            cars.setDocumentId(documentSnapshot.getId());
-
                             plate = car.getPlatNo();
-
-
-
-                                                                              }
-                        if (platNo.equals(plate) ){
-                            Toast.makeText(Add_Car.this,"Car Already Exist",Toast.LENGTH_LONG).show();
-
-                        }else {
-                            uploadFile();
-
                         }
-
+                        if (platNo.equals(plate)) {
+                            Toast.makeText(Add_Car.this, "Car Already Exist", Toast.LENGTH_LONG).show();
+                        } else {
+                            uploadFile();
+                        }
 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
                     }
                 });
-
-
-
 //========================================================================================
-
-            if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
-                    && data != null && data.getData() != null) {
-                imageUri = data.getData();
-
-            }
-
-            imageAdded = imageUrlList.size();
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            imageUri = data.getData();
+        }
+        imageAdded = imageUrlList.size();
 //            platNo = editTextPlate.getText().toString().replace(" ", "");
-
-
 //================= Image Name =====================================
-
-            if (imageAdded == 0) {
-                imageName = platNo + "." + getFileExtension(imageUri);
-            } else {
-                imageName = platNo + imageAdded + "." + getFileExtension(imageUri);
-            }
-
-
-
+        if (imageAdded == 0) {
+            imageName = platNo + "." + getFileExtension(imageUri);
+        } else {
+            imageName = platNo + imageAdded + "." + getFileExtension(imageUri);
+        }
     }
 
     //========================================================================================
@@ -336,9 +294,9 @@ public class Add_Car extends AppCompatActivity  {
     public void out(View view) {
         FirebaseAuth.getInstance().signOut();
     }
-//========================================================================================
 
-    //============== Get File Extention To Name It On Firebase Storage =======================
+    //========================================================================================
+//============== Get File Extention To Name It On Firebase Storage =======================
     private String getFileExtension(Uri uri) {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
@@ -348,74 +306,60 @@ public class Add_Car extends AppCompatActivity  {
     //========================================================================================
 //==================== Upload Image Method================================================
     private void uploadFile() {
-
-
         if (imageUri != null) {
 //============== Get Entered Plate No To Name Eache Image With Its Plate NO ==============
-
-            carsImageStorageRef = FirebaseStorage.getInstance().getReference(platNo+"_"+"Images");
-
-                final StorageReference fileReference = carsImageStorageRef.child(imageName);
+            carsImageStorageRef = FirebaseStorage.getInstance().getReference(platNo + "_" + "Images");
+            final StorageReference fileReference = carsImageStorageRef.child(imageName);
 //===================Uploading Image Progress Action ======================================
-                fileReference.putFile(imageUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        uploadImageProgressBar.setProgress((int) progress);
-
+            fileReference.putFile(imageUri).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    uploadImageProgressBar.setProgress((int) progress);
+                }
+            }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
                     }
-                }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (!task.isSuccessful()) {
-                            throw task.getException();
-                        }
-                        return fileReference.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            addCarProgressBar.setVisibility(View.GONE);
+                    return fileReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        addCarProgressBar.setVisibility(View.GONE);
 //========== Display Uploaded Image ========================================================
-                            Picasso.get().load(imageUri).into(imageView);
+                        Picasso.get().load(imageUri).into(imageView);
 //========== Reset Progress Bar After Finish ===============================================
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    uploadImageProgressBar.setProgress(0);
-                                }
-                            }, 5000);
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                uploadImageProgressBar.setProgress(0);
+                            }
+                        }, 5000);
 
-                            Toast.makeText(Add_Car.this, "Upload Successful", Toast.LENGTH_LONG).show();
-                            buttonChooseImage.setText("Add More Images");
-                            buttonChooseImage.setClickable(true);
+                        Toast.makeText(Add_Car.this, "Upload Successful", Toast.LENGTH_LONG).show();
+                        buttonChooseImage.setText("Add More Images");
+                        buttonChooseImage.setClickable(true);
 //========== Get Uploaded Image URL To Add In Cars DataBase ================================
-                            Uri downloadUri = task.getResult();
-                            URL = downloadUri.toString();
-
-                            imageUrlList.add(URL);
-
-
-
+                        Uri downloadUri = task.getResult();
+                        URL = downloadUri.toString();
+                        imageUrlList.add(URL);
 //========== Call AddCar Method After Geting URL ===========================================
 //                            addCar(null);
-//
-                        } else {
-                            Toast.makeText(Add_Car.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        Toast.makeText(Add_Car.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
-
+                }
+            });
 //========================================================================================
-
-            } else {
-                Toast.makeText(this, "No File selected ", Toast.LENGTH_LONG).show();
-            }
+        } else {
+            Toast.makeText(this, "No File selected ", Toast.LENGTH_LONG).show();
         }
-
+    }
 
     //=========== Save Button Click Actions ===================================================
     public void saveCar(View view) {
@@ -428,46 +372,31 @@ public class Add_Car extends AppCompatActivity  {
     //=========================================================================================
 //============ Adding Car To DataBase =====================================================
     public void addCar(View view) {
-
-
-        platNo = editTextPlate.getText().toString().replace(" ","");
-
-        carsRef.whereEqualTo("platNo",platNo)
+        platNo = editTextPlate.getText().toString().replace(" ", "");
+        carsRef.whereEqualTo("platNo", platNo)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 //                        String cars = "";
-
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Cars car = documentSnapshot.toObject(Cars.class);
 //                            cars.setDocumentId(documentSnapshot.getId());
-
                             plate = car.getPlatNo();
-
-
-
                         }
-                        if (platNo.equals(plate) || platNo == plate ){
-                            Toast.makeText(Add_Car.this,"Car Already Exist",Toast.LENGTH_LONG).show();
-
-                        }else {
-
-
+                        if (platNo.equals(plate) || platNo == plate) {
+                            Toast.makeText(Add_Car.this, "Car Already Exist", Toast.LENGTH_LONG).show();
+                        } else {
                             String userId = LogIn_Activity.UserID;
 //                            String brand = editTextBrand.getText().toString();
 //                            String model = editTextModel.getText().toString();
-
                             String brand = selected_Brand;
                             String model = selected_Model;
-
                             String year = editTextYear.getText().toString();
                             String color = editTextColor.getText().toString();
                             String gov = editTextGov.getText().toString();
                             String city = editTextCity.getText().toString();
-
                             Cars cars = new Cars(userId, brand, model, year, color, platNo, gov, city, imageUrlList);
-
                             carsRef.add(cars).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
@@ -480,68 +409,39 @@ public class Add_Car extends AppCompatActivity  {
                                     Toast.makeText(Add_Car.this, "Error", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
-
-
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
                     }
                 });
-
-
-
-
-
-
-
-
-
-
-
     }
 
-
     public void getBrands(View view) {
-
-
-
         brandsRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Brands brand = documentSnapshot.toObject(Brands.class);
-
                             String Brand = brand.getBrands();
                             Brands.add(Brand);
-
                         }
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
                     }
                 });
-
     }
 
     public void getModels() {
         Models = new ArrayList<>();
         Models.add("All");
-
         modelsRef
 //                .whereEqualTo("brand",selected_Brand)
                 .get()
@@ -549,68 +449,50 @@ public class Add_Car extends AppCompatActivity  {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         String cars = "";
-
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Models models = documentSnapshot.toObject(Models.class);
 //                            cars.setDocumentId(documentSnapshot.getId());
-
                             String model = models.getModels();
                             String brand = models.getBrand();
                             Models.add(model);
-                                                 }
+                        }
                         models_Adapter = new ArrayAdapter<>(Add_Car.this, android.R.layout.simple_spinner_dropdown_item, Models);
                         spinner_Models.setAdapter(models_Adapter);
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
                     }
                 });
-
-
     }
-
 
     public void getModelsForSelectedBrand() {
 
         Models = new ArrayList<>();
         Models.add("All");
-
         modelsRef
-                .whereEqualTo("brand",selected_Brand)
+                .whereEqualTo("brand", selected_Brand)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         String cars = "";
-
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Models models = documentSnapshot.toObject(Models.class);
 //                            cars.setDocumentId(documentSnapshot.getId());
-
                             String model = models.getModels();
                             String brand = models.getBrand();
                             Models.add(model);
                         }
-
                         models_Adapter = new ArrayAdapter<>(Add_Car.this, android.R.layout.simple_spinner_dropdown_item, Models);
                         spinner_Models.setAdapter(models_Adapter);
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
                     }
                 });
-
-
     }
-
-
-
 }

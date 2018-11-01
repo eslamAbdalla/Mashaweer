@@ -123,7 +123,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/btn_rounded_login"
                         android:text="Confirm"
-                        android:onClick="addUser"/>
+                        android:onClick="confirmUser"/>
                 </LinearLayout>
             </LinearLayout>
 
